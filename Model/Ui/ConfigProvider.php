@@ -23,8 +23,8 @@ final class ConfigProvider implements ConfigProviderInterface
 {
 
     const LAUNCH_TIME_URL = 'https://humm-variables.s3-ap-southeast-2.amazonaws.com/nz-launch-time.txt';
-    const LAUNCH_TIME_DEFAULT = "2030-05-11 00:00:00 UTC";
-    const LAUNCH_TIME_CHECK_ENDS = "2030-11-18 00:00:00 UTC";
+    const LAUNCH_TIME_DEFAULT = "2019-05-11 00:00:00 UTC";
+    const LAUNCH_TIME_CHECK_ENDS = "2019-06-11 00:00:00 UTC";
 
     protected $_gatewayConfig;
     protected $_scopeConfigInterface;
@@ -110,7 +110,7 @@ final class ConfigProvider implements ConfigProviderInterface
         }
         $launch_time = $this->_gatewayConfig->getLaunchTime();
         $launch_time_update_time = $this->_gatewayConfig->getLaunchTimeUpdated();
-        if (empty($launch_time) || empty($launch_time_update_time) || (time() - $launch_time_update_time >= 60)) {
+        if (empty($launch_time) || empty($launch_time_update_time) || (time() - $launch_time_update_time >= 3600)) {
             $remote_launch_time_string = '';
             try {
                 $remote_launch_time_string = file_get_contents(self::LAUNCH_TIME_URL);
