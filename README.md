@@ -4,12 +4,22 @@ The following instructions detail how to install the **humm** payment gateway on
 
 This assumes that you have signed the required Merchant Agreement and have been provided a Merchant ID and API Key.
 
+# Magento2 Specification.pdf in the current folder
+
+# Getting help. 
+
+If you would like assistance with the installation of the plugin or you need an API key, please contact the **humm** Platform Integration Team pit@shophumm.com.au
+
+Please see https://docs.shophumm.com.au for information on how to use this plugin. 
+
+
+
 ## Install using Composer 
 
  
 1. Add the **humm** repository
 
-        composer config repositories.shophumm git https://github.com/shophumm/humm-magento2.x.git
+        composer config repositories.shophumm git https://github.com/shophumm/humm-au-magento2.x.git
 
 2. Require the Humm Payment Gateway Module
 
@@ -22,110 +32,64 @@ This assumes that you have signed the required Merchant Agreement and have been 
 4. Update the database
 
         ./bin/magento setup:upgrade
+        
+5. Update the DI complie
 
-5.  Configure the plugin
+        ./bin/magento setup:di:compile  
+        
+6. option to run 
+ 
+        ./bin/magento setup:static-content:deploy 
+               
+7.  Configure the plugin
 
 Login to the  administration interface and go to:
   
- * Stores -> Configuration -> Sales -> Payment Methods 
+ * Stores → Configuration → Sales → Payment Methods 
 
  * Scroll Down to "Other Payment Methods" and select "Humm Payment Gateway" 
 
  * Enter your Merchant Number and API Key and select "Save Config" in the top right of the screen. 
 
 
-## Getting help. 
+## Integrating **humm** Manually
 
-If you would like assistance with the installation of the plugin or you need an API key, please contact the **humm** Platform Integration Team pit@shophumm.com.au
+1 - Download the **humm** plugin zip from [GitHub](https://github.com/shophumm/humm-au-magento2.x.git).
 
-Please see https://docs.shophumm.com.au for information on how to use this plugin. 
+2 - Unzip it then copy all folders into the `MAGENTO_DIR/app/code/Humm/HummPaymentGateway` directory on your webserver.
 
+>  If the `code/Humm/HummPaymentGateway` folder doesn't exist, then create it manually.
 
+3 - Run `MAGENTO_DIR/bin/magento setup:upgrade` to enable **humm**.
 
-New Version Release 202001 By Roger&Michael
+   You should see `Module 'Humm_HummPaymentGateway'` in the output of the command.
 
+>  Depending on your tech stack, you might have to use the <code>php</code> prefix (`php MAGENTO_DIR/bin/magento setup:upgrade`) when running the various <code>magento</code> commands.
 
-New functions 
+4 - Run bin/magento module:enable Humm_HummPaymentGateway
 
+5 - Flush Magento's Cache: **Settings** → **Cache Management** → **Flush Magento Cache**.
 
+Alternatively, run <code>MAGENTO_DIR/bin/magento cache:flush</code> from command line.
 
-    1. New configuration admin and UI
+6  -DI compile
 
+  - Run `MAGENTO_DIR/bin/magento setup:di:compile`
 
+> You may need to run `MAGENTO_DIR/bin/magento setup:static-content:deploy`. This is to avoid generated HTML referring to javascript/css that haven't been added to the list of compiled/minified assets which can break your store's front-end/admin panel.
 
-    2. System Configurations easily are setup in the admin console then they work well in front end of store 
+* humm-payment.log for review if you have some installation issues
 
-  
+## Configuration
 
-    3. Six banners and widgets are shown automatically in different pages ,so first plugin with automation to best integration performance 
+Navigate to **stores** → **Configuration** → **Sales** → **Payment Methods**.
 
 
+Reference Online Doc
 
-    4. Banners and widgets can be customised with specific clients' requirements
+#https://docs.shophumm.com.au/ecommerce/magento_2/ Configuration sections
 
 
 
-    5. Add a few pages for better UI to clients 
 
- 
-
-    6. Add a Sever to Server Callback Post function
-
-
-
-    7. An separated payment Log file 
-
-
-
-    8. Unit test sections 
-
-
-
-   
-
-Rebuild functions
-
-
-
-    1. API post call 
-
-
-
-    2. Abandon Cart issues 
-
-
-
-    3. Error control & Formative error messages
-
-     
-
-     4. Remove unnecessary hardcode and changed to setup in the admin configure UI
-
-
-
-     5. Rebuild configure default parameters 
-
-
-
-
-
- 
-
-Software Design Patterns Addition
-
-
-
-     1. Event/Observer  
-
-    
-
-     2. All of code match  PHP standard & PHP Doc
-
-
-
-     3. Widgets & Banner templates
-
-
-
-     4. Dependency Injections for better M2 development 
 
