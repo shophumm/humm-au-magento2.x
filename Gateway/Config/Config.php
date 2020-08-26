@@ -81,14 +81,15 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTitle()
     {
-        $is_after = ((time() - $this->getLaunchTime() >= 0) || $this->getForceHumm());
+//        $is_after = ((time() - $this->getLaunchTime() >= 0) || $this->getForceHumm());
+//
+//        if ($this->getSpecificCountry() == 'NZ') {
+//            $title = $is_after ? 'Humm' : 'Oxipay';
+//        } else if ($this->getSpecificCountry() == 'AU') {
+//            $title = 'Humm';
+//        }
 
-        if ($this->getSpecificCountry() == 'NZ') {
-            $title = $is_after ? 'Humm' : 'Oxipay';
-        } else if ($this->getSpecificCountry() == 'AU') {
-            $title = 'Humm';
-        }
-        return $title;
+        return 'Humm';
     }
 
     /**
