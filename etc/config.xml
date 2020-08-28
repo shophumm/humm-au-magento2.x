@@ -40,7 +40,7 @@
                     <little_big>2000</little_big>
                     <humm_logger>1</humm_logger>
                     <humm_approved_order_status>processing</humm_approved_order_status>
-                    <pending_orders_timeout>0</pending_orders_timeout>
+                    <pending_orders_timeout>2</pending_orders_timeout>
                     <pending_order>1</pending_order>
                 </humm_conf>
                 <humm_advert>
