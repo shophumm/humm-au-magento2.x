@@ -69,16 +69,13 @@ define(
                 console.log("Redirect humm payment..");
                 this.disableButton();
                 self.isPlaceOrderActionAllowed(false);
-                self.messageContainer.clear();
-                self.messageContainer.addSuccessMessage({'message': 'Redirect the Humm Payment'});
                 if (event) {
                     event.preventDefault();
                 }
+                var body = $('body').loader();
+                body.loader('show');
                 let hummControllerUrl = url.build('humm/checkout/index');
                 $.post(hummControllerUrl, 'json').done(function (response) {
-                    self.messageContainer.addSuccessMessage({'message': 'Redirecting to humm...'});
-                    fullScreenLoader.stopLoader(true);
-                    fullScreenLoader.startLoader();
                     $('[data-button="place"]').attr('disabled', 'disabled');
                     formBuilder(response).submit();
                 })
@@ -86,7 +83,7 @@ define(
                         errorProcessor.process(response, this.messageContainer);
                     })
                     .always(function () {
-                        fullScreenLoader.stopLoader();
+                        body.loader('hide');
                     });
                 return true;
             },
