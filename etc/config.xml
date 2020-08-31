@@ -32,8 +32,8 @@
                 <humm_conf>
                     <specificcountry>AU</specificcountry>
                     <min_order_total>20</min_order_total>
-                    <force_humm>0</force_humm>
-                    <is_testing>1</is_testing>
+                    <force_humm>1</force_humm>
+                    <is_testing>0</is_testing>
                     <automatic_invoice>1</automatic_invoice>
                     <sort_order>20</sort_order>
                     <payment_action>initialize</payment_action> <!--Important: read Magento\Sales\Model\Order-->
