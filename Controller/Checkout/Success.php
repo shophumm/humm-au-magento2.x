@@ -12,8 +12,8 @@ use Magento\Framework\App\RequestInterface;
  * @package Humm\HummPaymentGateway\Controller\Checkout
  * @ update for new version
  */
-class Success extends AbstractAction implements CsrfAwareActionInterface
-//class Success extends AbstractAction
+//class Success extends AbstractAction implements CsrfAwareActionInterface
+class Success extends AbstractAction
 {
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
@@ -194,21 +194,21 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         $transaction->save();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
+//    /**
+//     * @inheritDoc
+//     */
+//    public function createCsrfValidationException(
+//        RequestInterface $request
+//    ): ?InvalidRequestException
+//    {
+//        return null;
+//    }
+//
+//    /**
+//     * @inheritDoc
+//     */
+//    public function validateForCsrf(RequestInterface $request): ?bool
+//    {
+//        return true;
+//    }
 }

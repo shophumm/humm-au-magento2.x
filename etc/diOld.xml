@@ -144,8 +144,4 @@
             <argument name="hummLogger" xsi:type="object">Humm\HummPaymentGateway\Helper\HummLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Request\CsrfValidator">
-        <plugin name="csrf_validator_skip" type="Humm\HummPaymentGateway\Plugin\CsrfValidatorSkip" />
-    </type>
-
 </config>
