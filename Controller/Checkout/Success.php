@@ -12,7 +12,8 @@ use Magento\Framework\App\RequestInterface;
  * @package Humm\HummPaymentGateway\Controller\Checkout
  * @ update for new version
  */
-class Success extends AbstractAction implements CsrfAwareActionInterface
+//class Success extends AbstractAction implements CsrfAwareActionInterface
+class Success extends AbstractAction
 {
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
@@ -26,7 +27,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
             return;
         }
         if (count($errMsg)) {
-            $this->getHummLogger()->log(sprintf("End by error %s",json_encode($errMsg)),true);
+            $this->getHummLogger()->log(sprintf("End by error %s", json_encode($errMsg)), true);
             return;
         }
         if ($result == "completed" && $orderState != Order::STATE_CANCELED) {
@@ -64,7 +65,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
                 $this->getHummLogger()->log("Successful Update State/Status Error:" . $e->getMessage());
             }
             $this->_redirect('checkout/onepage/success', array('_secure' => false));
-        } elseif ( $result == "failed" && $orderState != Order::STATE_CANCELED ) {
+        } elseif ($result == "failed" && $orderState != Order::STATE_CANCELED) {
             $this->_eventManager->dispatch('humm_payment_coupon_cancel', ['order' => $order, 'type' => $result]);
             $this->getHummLogger()->log('humm_payment_coupon_cancel ' . $orderId);
             $this->_eventManager->dispatch('humm_payment_cancel', ['order' => $order, 'type' => $result]);
@@ -196,18 +197,18 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
     /**
      * @inheritDoc
      */
-    public function createCsrfValidationException(
-        RequestInterface $request
-    ): ?InvalidRequestException
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
+//    public function createCsrfValidationException(
+//        RequestInterface $request
+//    ): ?InvalidRequestException
+//    {
+//        return null;
+//    }
+//
+//    /**
+//     * @inheritDoc
+//     */
+//    public function validateForCsrf(RequestInterface $request): ?bool
+//    {
+//        return true;
+//    }
 }
