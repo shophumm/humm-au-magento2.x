@@ -41,6 +41,7 @@ class UpdateHummOrder
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_timeZone;
+
     /**
      * @var Config\Config
      */
@@ -49,6 +50,11 @@ class UpdateHummOrder
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
+
+    /**
+     * @var
+     */
+    static protected $_currentTime;
 
     /**
      * UpdateHummOrder constructor.
@@ -63,7 +69,6 @@ class UpdateHummOrder
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Humm\HummPaymentGateway\Gateway\Config\Config $config
-
     )
     {
         $this->_hummlogger = $hummLogger;
@@ -71,7 +76,6 @@ class UpdateHummOrder
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_hummConfig = $config;
         $this->_eventManager = $eventManager;
-
     }
 
     /**
@@ -87,12 +91,14 @@ class UpdateHummOrder
             return $this;
         }
         $daysSkip = intval($this->_hummConfig->getConfigdata('humm_conf/pending_orders_timeout'));
-        $time = $this->_timeZone->scopeTimeStamp();
-        $dateNow = (new \DateTime())->setTimestamp($time);
-        $to = $dateNow->format('Y-m-d H:i:s');
-        $from = $dateNow->sub(new \DateInterval('P' . $daysSkip . 'D'))->format('Y-m-d H:i:s');
-        $this->_hummlogger->log(sprintf("Start Crontab..time now%s Status [%s..]", $to, $yesNo));
-        $this->_hummlogger->log(sprintf("from %s to %s", $from, $to));
+
+        $dataNow = new \DateTime(null, new \DateTimeZone('Australia/Sydney'));
+        $dateCheck = new \DateTime(null, new \DateTimeZone('GMT'));
+        $from = $dateCheck->sub(new \DateInterval('P' . $daysSkip . 'D'))->format('Y-m-d H:i:s');
+
+        $to = self::getGMTTime();
+        $this->_hummlogger->log(sprintf("Start Crontab now [%s]...from [%s] to [%s] Status Enable [..%s..]", $dataNow->format('Y-m-d H:i:s'), $from, $to, $yesNo));
+        $this->_hummlogger->log(sprintf("start from %s to %s", $from, $to));
         $_collection = $this->getOrderCollectionPaymentMethod(self::paymentMethod, $from, $to);
         $this->processCollection($_collection);
         return $this;
@@ -110,6 +116,7 @@ class UpdateHummOrder
             ->addFieldToSelect('*')
             ->addFieldToFilter('created_at',
                 ['gteq' => $from]
+
             )
             ->addFieldToFilter('created_at',
                 ['lteq' => $to]
@@ -142,7 +149,8 @@ class UpdateHummOrder
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         foreach ($collection as $key => $item) {
-            $this->_hummlogger->log(sprintf("Cron: OrderID %s, State %s, Status %s",$item->getData('increment_id'), $item->getData('state'), $item->getData('status')), true);
+            $this->_hummlogger->log(sprintf("Cron: OrderID %s, State %s, Status %s EntityId %s Created_at %s", $item->getData('increment_id'), $item->getData('state'), $item->getData('status'), $item->getData('entity_id'), $item->getData('created_at')), true);
+
             $hummOrderId = $item->getData('increment_id');
             $this->processHummOrder($hummOrderId, $objectManager);
         }
@@ -155,9 +163,10 @@ class UpdateHummOrder
      */
 
     public function processHummOrder($hummOrderId, $objectManager)
-    {
 
+    {
         $hummOrder = $objectManager->create('\Magento\Sales\Model\Order')->loadByIncrementId($hummOrderId);
+
 
         if ($hummOrder->getAppliedRuleIds()) {
             $this->_hummlogger->log(sprintf("Begin Cron Coupon functions [OrderId:%s] Coupon [Ids:%s]", $hummOrderId, json_encode($hummOrder->getAppliedRuleIds())));
@@ -172,7 +181,6 @@ class UpdateHummOrder
             $hummPayment->setAdditionalInformation($AdditionalInformationNew);
             $hummOrder->registerCancellation('Cancelled by customer Cron Humm Payment ')->save();
         }
-
     }
 
     /**
@@ -189,6 +197,40 @@ class UpdateHummOrder
             );
         return $collection;
 
+    }
+
+    /**
+     *
+     */
+
+    public function getCurrentTime()
+    {
+        $time = $this->_timeZone->scopeTimeStamp();
+        $span = rand(17, 53);
+        $dateNow = (new \DateTime())->setTimestamp($time);
+        $toDataNow = $dateNow->sub(new \DateInterval('PT' . $span . 'M'))->format('Y-m-d H:i:s');
+        $this->_hummlogger->log(sprintf("UpdateTotime: %s   span time  %s", $toDataNow, $span), true);
+        return $toDataNow;
+    }
+
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+
+    public function getGMTTime()
+    {
+
+        $dateCheck = new \DateTime(null, new \DateTimeZone('GMT'));
+
+        $span = rand(17, 53);
+
+        $toDataNow = $dateCheck->sub(new \DateInterval('PT' . $span . 'M'))->format('Y-m-d H:i:s');
+
+        $this->_hummlogger->log(sprintf("UpdateTotime: %s   span time  %s", $toDataNow, $span), true);
+
+        return $toDataNow;
     }
 }
 
