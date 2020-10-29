@@ -1,25 +1,26 @@
 <?php list($productPrice, $littleBig) = $block->_getProductPrice(); ?>
 <?php $country = $block->_getCountry(); ?>
+<?php $productSelector = $block->_getProductSeletor();
+
+if (empty(trim($productSelector))) {
+    $productSelector = '.product-info-price';
+}
+?>
+
 <?php if ($country == 'AU') : ?>
     <?php if (!$littleBig) : ?>
-        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&LittleThings"></script>
+        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&LittleThings&element= <?php echo $productSelector ?>"></script>
     <?php else: ?>
-        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&BigOnly"></script>
+        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&BigOnly&element= <?php echo $productSelector ?>"></script>
     <?php endif; ?>
 <?php endif; ?>
+
 
 <?php if ($country == 'NZ'): ?>
     <?php if (!$littleBig) {
         $ec_pattern = sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&LittleThings&little=F5', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&LittleThings&little=w10', '"></script>');
-    } else {
-        $ec_pattern = sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&big=M6', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&big=M9', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&big=M12', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&big=M18', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $productPrice, '&big=M24', '"></script>');
     }
-      echo $ec_pattern;
+    echo $ec_pattern;
 endif; ?>
 
 

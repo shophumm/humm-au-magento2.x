@@ -48,7 +48,10 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         'widget' => [
             'product' => Config::ADVERTS_PRODUCTPAGE_WIDGET_ACTIVE,
             'cart' => Config::ADVERTS_CARTPAGE_WIDGET_ACTIVE,
-
+        ],
+        'selector'=>[
+            'product' => Config::ADVERTS_PRODUCTPAGE_WIDGET_ACTIVE,
+            'cart' => Config::ADVERTS_CARTPAGE_WIDGET_ACTIVE,
         ]
     ];
 
@@ -160,5 +163,21 @@ abstract class AbstractAdvert extends \Magento\Framework\View\Element\Template
         return $this->_config->getLittleBig();
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function _getProductSeletor()
+    {
+        return $this->_config->getProductSelector();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function _getCartSeletor()
+    {
+        return $this->_config->getCartSelector();
+    }
 
 }
