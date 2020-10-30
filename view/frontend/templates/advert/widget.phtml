@@ -9,7 +9,7 @@ if (empty(trim($productSelector))) {
 
 <?php if ($country == 'AU') : ?>
     <?php if (!$littleBig) : ?>
-        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&LittleThings&element= <?php echo $productSelector ?>"></script>
+        <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&LittleThings&element= <?php echo urlencode($productSelector) ?>"></script>
     <?php else: ?>
         <script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=<?php echo $productPrice ?>&BigOnly&element= <?php echo $productSelector ?>"></script>
     <?php endif; ?>

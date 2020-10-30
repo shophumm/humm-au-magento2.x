@@ -2,24 +2,27 @@
 $threshold = $block->_getThreshold();
 $markThres = floatval($total) > floatval($threshold) ? "&BigOnly" : "&LittleThings";
 $markFlag = floatval($total) > floatval($threshold);
+$cartSelector = $block->_getCartSeletor();
+
+if (empty(trim($cartSelector))) {
+    $cartSelector = '.page-title';
+}
+
+$markThres = $markThres.'&elements='.urlencode($cartSelector) ;
+
 ?>
 
 <?php $country = $block->_getCountry(); ?>
 <?php if ($country == 'AU') {
-//  $ec_pattern = sprintf("%s", "<script src=\"https://widgets.shophumm.com.au/content/scripts/more-info-mini.js\"></script>");
     $ec_pattern = sprintf("%s %s %s %s ", '<script src="https://widgets.shophumm.com.au/content/scripts/price-info.js?productPrice=', $total, $markThres, '"></script>');
 }
 if ($country == 'NZ') {
     if (!$markFlag) {
         $ec_pattern = sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&LittleThings&little=F5', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&LittleThings&little=w10', '"></script>');
-    } else {
-        $ec_pattern = sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice==', $total, '&big=M6', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&big=M9', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&big=M12', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&big=M18', '"></script>');
-        $ec_pattern = $ec_pattern . sprintf("%s%s%s%s", '<script src= "https://widgets.shophumm.co.nz/content/scripts/price-info.js?productPrice=', $total, '&big=M24', '"></script>');
     }
 }
-    echo $ec_pattern;
+ echo $ec_pattern;
 ?>
+
+
+
