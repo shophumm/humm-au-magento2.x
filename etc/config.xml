@@ -51,10 +51,12 @@
                     <productpage>
                         <banner>0</banner>
                         <widget>0</widget>
+                        <selector>.product-info-price</selector>
                     </productpage>
                     <cartpage>
                         <banner>0</banner>
                         <widget>0</widget>
+                        <selector>.cart-summary</selector>
                     </cartpage>
                 </humm_advert>
             </humm_gateway>

@@ -144,6 +144,10 @@
                             <label>Display Widget</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
+                        <field id="selector" translate="label" type="text" sortOrder="3" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Tag Selector</label>
+                        </field>
                     </group>
                     <group id="cartpage" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1"
                            showInStore="1">
@@ -157,6 +161,10 @@
                                showInWebsite="1" showInStore="1">
                             <label>Display Widget</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="selector" translate="label" type="text" sortOrder="3" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Tag Selector</label>
                         </field>
                     </group>
                 </group>
