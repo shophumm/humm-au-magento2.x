@@ -43,6 +43,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const ADVERTS_PRODUCTPAGE_WIDGET_ACTIVE = 'humm_advert/productpage/widget';
     const ADVERTS_CARTPAGE_BANNER_ACTIVE = 'humm_advert/cartpage/banner';
     const ADVERTS_CARTPAGE_WIDGET_ACTIVE = 'humm_advert/cartpage/widget';
+    const ADVERTS_PRODUCTPAGE_SELECTOR = 'humm_advert/productpage/selector';
+    const ADVERTS_CARTPAGE_SELECTOR = 'humm_advert/cartpage/selector';
 
     /**
      * Get Merchant Number
@@ -81,14 +83,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getTitle()
     {
-//        $is_after = ((time() - $this->getLaunchTime() >= 0) || $this->getForceHumm());
-//
-//        if ($this->getSpecificCountry() == 'NZ') {
-//            $title = $is_after ? 'Humm' : 'Oxipay';
-//        } else if ($this->getSpecificCountry() == 'AU') {
-//            $title = 'Humm';
-//        }
-
         return 'Humm';
     }
 
@@ -287,6 +281,25 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return $this->getValue(self::CONF_PREFIX . self::KEY_HUMM_LOGGER);
     }
+
+    /**
+     * @return mixed
+     */
+
+    public function getCartSelector()
+    {
+        return $this->getValue( self::ADVERTS_CARTPAGE_SELECTOR);
+    }
+
+    /**
+     * @return mixed
+     */
+
+    public function getProductSelector()
+    {
+        return $this->getValue(self::ADVERTS_PRODUCTPAGE_SELECTOR);
+    }
+
 }
 
 
