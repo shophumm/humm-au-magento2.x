@@ -206,7 +206,7 @@ class UpdateHummOrder
     public function getCurrentTime()
     {
         $time = $this->_timeZone->scopeTimeStamp();
-        $span = rand(17, 53);
+        $span = rand(21, 53);
         $dateNow = (new \DateTime())->setTimestamp($time);
         $toDataNow = $dateNow->sub(new \DateInterval('PT' . $span . 'M'))->format('Y-m-d H:i:s');
         $this->_hummlogger->log(sprintf("UpdateTotime: %s   span time  %s", $toDataNow, $span), true);
@@ -224,7 +224,7 @@ class UpdateHummOrder
 
         $dateCheck = new \DateTime(null, new \DateTimeZone('GMT'));
 
-        $span = rand(17, 53);
+        $span = rand(21, 53);
 
         $toDataNow = $dateCheck->sub(new \DateInterval('PT' . $span . 'M'))->format('Y-m-d H:i:s');
 
