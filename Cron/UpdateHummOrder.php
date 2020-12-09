@@ -176,10 +176,10 @@ class UpdateHummOrder
         if ($hummOrder->getId() && $hummOrder->getState() != Order::STATE_CANCELED) {
             $hummPayment = $hummOrder->getPayment();
             $AdditionalInformation = $hummPayment->getAdditionalInformation();
-            $AdditionalInformationNew = array_merge($AdditionalInformation, [$hummOrderId => sprintf("Update Humm Pending OrderId %s to Cancelled", $hummOrderId)]);
+            $AdditionalInformationNew = array_merge($AdditionalInformation, [$hummOrderId => sprintf("Update Humm Pending OrderId %s to Cancelled ", $hummOrderId)]);
             $this->_hummlogger->log(sprintf("Additional %s ", json_encode($AdditionalInformationNew)));
             $hummPayment->setAdditionalInformation($AdditionalInformationNew);
-            $hummOrder->registerCancellation('Cancelled by customer Cron Humm Payment ')->save();
+            $hummOrder->registerCancellation('Cancelled by Humm Corntab due to long time pending')->save();
         }
     }
 

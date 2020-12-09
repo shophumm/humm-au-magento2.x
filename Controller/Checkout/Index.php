@@ -68,7 +68,7 @@ class Index extends AbstractAction
             'x_url_cancel' => $this->getDataHelper()->getCancelledUrl($orderId),
             'x_shop_name' => $this->getDataHelper()->getStoreCode(),
             'x_account_id' => $this->getGatewayConfig()->getMerchantNumber(),
-            'x_reference' => sprintf("%s-%s", $orderId, $order->getProtectCode()),
+            'x_reference' => $orderId,
             'x_invoice' => $orderId,
             'x_amount' => $order->getTotalDue(),
             'x_customer_first_name' => $order->getCustomerFirstname(),
