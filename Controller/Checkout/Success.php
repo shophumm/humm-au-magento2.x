@@ -84,7 +84,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         $params = $this->getRequest()->getParams();
         $isValid = $this->getCryptoHelper()->isValidSignature($this->getRequest()->getParams(), $this->_encrypted->processValue($this->getGatewayConfig()->getApiKey()));
         $result = $params['x_result'];
-        list($orderId, $hummProtectCode) = explode("-", $params['x_reference']);
+        $orderId = trim($params['x_reference']);
         $transactionId = $params['x_gateway_reference'];
         $merchantNo = $params['x_account_id'];
         $order = $this->getOrderById($orderId);
