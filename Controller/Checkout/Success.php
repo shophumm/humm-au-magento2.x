@@ -84,7 +84,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         $params = $this->getRequest()->getParams();
         $isValid = $this->getCryptoHelper()->isValidSignature($this->getRequest()->getParams(), $this->_encrypted->processValue($this->getGatewayConfig()->getApiKey()));
         $result = $params['x_result'];
-        list($orderId, $hummProtectCode) = explode("-", $params['x_reference']);
+        $orderId = trim($params['x_reference']);
         $transactionId = $params['x_gateway_reference'];
         $merchantNo = $params['x_account_id'];
         $order = $this->getOrderById($orderId);
@@ -92,7 +92,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         $errorMsg = array();
         $redirectErrorURL = "humm/checkout/error";
         $merchantNumber = $this->getGatewayConfig()->getMerchantNumber();
-        array_push($mesg, sprintf("CallBack Start: Order ProtectCode [Web:%s] [Humm:%s] | MerchantNo [web:%s] [Humm:%s]|[Response---%s] [method--%s]", $order->getProtectCode(), $hummProtectCode, $merchantNumber, $merchantNo, json_encode($this->getRequest()->getParams()), $this->getRequest()->getMethod()));
+        array_push($mesg, sprintf("CallBack Start: MerchantNo [web:%s] [Humm:%s]|[Response---%s] [method--%s]", $merchantNumber, $merchantNo, json_encode($this->getRequest()->getParams()), $this->getRequest()->getMethod()));
         array_push($mesg, sprintf("Client IP: %s", $this->getClientIP()));
 
         if ($result == "completed" && $order->getState() === Order::STATE_PROCESSING) {
@@ -101,7 +101,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         }
 
         if (($merchantNo != $this->getGatewayConfig()->getMerchantNumber())) {
-            array_push($errorMsg, sprintf("ERROR: Order ProtectCode [Web:%s] [Humm:%s] | %s MerchantNo %s |[Response---%s] [method--%s]", $order->getProtectCode(), $hummProtectCode, $merchantNumber, $merchantNo, json_encode($this->getRequest()->getParams()), $this->getRequest()->getMethod()));
+            array_push($errorMsg, sprintf("ERROR: | MerchantNo %s |[Response---%s] [method--%s]", $merchantNo, json_encode($this->getRequest()->getParams()), $this->getRequest()->getMethod()));
         }
 
         if (!$isValid) {
