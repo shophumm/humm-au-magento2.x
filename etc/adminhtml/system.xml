@@ -21,6 +21,11 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="6" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Sort Order</label>
+                    <validate>validate-number</validate>
+                </field>
                 <group id="humm_conf" translate="label" type="text" sortOrder="10" showInDefault="2" showInWebsite="1"
                        showInStore="1">
                     <label>Humm Payment Configuration</label>
@@ -97,11 +102,6 @@
                     <field id="little_big" translate="label" type="text" sortOrder="150" showInDefault="1"
                            showInWebsite="1" showInStore="0">
                         <label>Little Things Limit</label>
-                        <validate>validate-number</validate>
-                    </field>
-                    <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1"
-                           showInWebsite="1" showInStore="0">
-                        <label>Sort Order</label>
                         <validate>validate-number</validate>
                     </field>
                     <field id="pending_order" translate="label" type="select" sortOrder="170" showInDefault="1"
