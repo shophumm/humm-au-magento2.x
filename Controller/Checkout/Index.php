@@ -45,16 +45,25 @@ class Index extends AbstractAction
      */
     private function getPayload($order)
     {
+        $isVirtual = false;
         if ($order == null) {
                 $this->getHummLogger()->log('Unable to get order from last lodged order id. Possibly related to a failed database call');
                $this->_redirect('checkout/onepage/error', array('_secure' => false));
         }
+        foreach ($order->getAllItems() as $items) {
+            if ($items->getProductType() == 'virtual') {
+                $isVirtual = true;
+                break;
+            }
+        }
 
-        $shippingAddress = $order->getShippingAddress();
         $billingAddress = $order->getBillingAddress();
-
         $billingAddressParts = preg_split('/\r\n|\r|\n/', $billingAddress->getData('street'));
-        $shippingAddressParts = preg_split('/\r\n|\r|\n/', $shippingAddress->getData('street'));
+        
+        if(!$isVirtual) {
+            $shippingAddress = $order->getShippingAddress();
+            $shippingAddressParts = preg_split('/\r\n|\r|\n/', $shippingAddress->getData('street'));
+        }
 
         $orderId = $order->getRealOrderId();
         $magento_version = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\ProductMetadataInterface')->getVersion();
@@ -80,11 +89,11 @@ class Index extends AbstractAction
             'x_customer_billing_city' => $billingAddress->getData('city'),
             'x_customer_billing_state' => $billingAddress->getData('region'),
             'x_customer_billing_zip' => $billingAddress->getData('postcode'),
-            'x_customer_shipping_address1' => $shippingAddressParts[0],
-            'x_customer_shipping_address2' => count($shippingAddressParts) > 1 ? $shippingAddressParts[1] : '',
-            'x_customer_shipping_city' => $shippingAddress->getData('city'),
-            'x_customer_shipping_state' => $shippingAddress->getData('region'),
-            'x_customer_shipping_zip' => $shippingAddress->getData('postcode'),
+            'x_customer_shipping_address1' => $isVirtual ? "" : $shippingAddressParts[0],
+            'x_customer_shipping_address2' => $isVirtual ? "" : (count($shippingAddressParts) > 1 ? $shippingAddressParts[1] : ''),
+            'x_customer_shipping_city' => $isVirtual ? "":$shippingAddress->getData('city'),
+            'x_customer_shipping_state' => $isVirtual ? "":$shippingAddress->getData('region'),
+            'x_customer_shipping_zip' => $isVirtual ? "":$shippingAddress->getData('postcode'),
             'version_info' => 'Humm_' . $plugin_version . '_on_magento' . substr($magento_version, 0, 3),
             'x_test' => 'false',
             'x_transaction_timeout' => (intval($this->getGatewayConfig()->getConfigdata('humm_conf/api_timeout')) < 1440) ? intval($this->getGatewayConfig()->getConfigdata('humm_conf/api_timeout')) : 1440,
