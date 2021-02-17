@@ -22,7 +22,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
     public function execute()
     {
         list($order, $transactionId, $result, $orderId, $orderState, $errMsg) = $this->ValidateCallback();
-        if ($orderState == Order::STATE_PROCESSING) {
+        if (($orderState == Order::STATE_PROCESSING) || ($orderState == Order::STATE_COMPLETE) ) {
             $this->getHummLogger()->log(sprintf("Spare Code End:%s  %s", $result, $orderState), true);
             return;
         }
@@ -95,7 +95,7 @@ class Success extends AbstractAction implements CsrfAwareActionInterface
         array_push($mesg, sprintf("CallBack Start: MerchantNo [web:%s] [Humm:%s]|[Response---%s] [method--%s]", $merchantNumber, $merchantNo, json_encode($this->getRequest()->getParams()), $this->getRequest()->getMethod()));
         array_push($mesg, sprintf("Client IP: %s", $this->getClientIP()));
 
-        if ($result == "completed" && $order->getState() === Order::STATE_PROCESSING) {
+        if ($result == "completed" && ( ($order->getState() === Order::STATE_PROCESSING )|| ($order->getState() === Order::STATE_COMPLETE ))) {
             $this->_redirect('checkout/onepage/success', array('_secure' => false));
             $this->getHummLogger()->log(sprintf("Begin  [Order id%s ] State is %s leave now ..", $orderId, $order->getState()));
         }
