@@ -21,20 +21,20 @@ class Index extends AbstractAction
         try {
             $order = $this->getOrder();
             if ($order->getState() !== Order::STATE_PENDING_PAYMENT) {
-                    $this->getHummLogger()->log('Order in state: ' . $order->getState());
-                }
+                $this->getHummLogger()->log('Order in state: ' . $order->getState());
+            }
             $data = $this->getPayload($order);
             $payload = array(
                 'action' => $this->getGatewayConfig()->getGatewayUrl(),
                 'fields' => $data
             );
         } catch (Exception $ex) {
-                $this->getHummLogger()->log('An exception was encountered in humm/checkout/index: ' . $ex->getMessage());
-                $this->getHummLogger()->log($ex->getTraceAsString());
-                $this->getMessageManager()->addErrorMessage(__('Unable to start humm Checkout.'));
+            $this->getHummLogger()->log('An exception was encountered in humm/checkout/index: ' . $ex->getMessage());
+            $this->getHummLogger()->log($ex->getTraceAsString());
+            $this->getMessageManager()->addErrorMessage(__('Unable to start humm Checkout.'));
         }
         $result = $this->_resultJsonFactory->create();
-            $this->getHummLogger()->log("Transaction Start   Payload--" . json_encode($payload));
+        $this->getHummLogger()->log("Transaction Start   Payload--" . json_encode($payload));
         return $result->setData($payload);
     }
 
@@ -45,24 +45,21 @@ class Index extends AbstractAction
      */
     private function getPayload($order)
     {
-        $isVirtual = false;
         if ($order == null) {
-                $this->getHummLogger()->log('Unable to get order from last lodged order id. Possibly related to a failed database call');
-               $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            $this->getHummLogger()->log('Unable to get order from last lodged order id. Possibly related to a failed database call');
+            $this->_redirect('checkout/onepage/error', array('_secure' => false));
         }
-        foreach ($order->getAllItems() as $items) {
-            if ($items->getProductType() == 'virtual') {
-                $isVirtual = true;
-                break;
-            }
-        }
-
         $billingAddress = $order->getBillingAddress();
         $billingAddressParts = preg_split('/\r\n|\r|\n/', $billingAddress->getData('street'));
-        
-        if(!$isVirtual) {
-            $shippingAddress = $order->getShippingAddress();
-            $shippingAddressParts = preg_split('/\r\n|\r|\n/', $shippingAddress->getData('street'));
+        $shippingAddress = $order->getShippingAddress();
+        if (!empty($shippingAddress)) {
+            if ($shippingAddress->getData('street')) {
+                $shippingAddressParts = preg_split('/\r\n|\r|\n/', $shippingAddress->getData('street'));
+            } else {
+                $shippingAddressParts = null;
+            }
+        } else {
+            $shippingAddress = null;
         }
 
         $orderId = $order->getRealOrderId();
@@ -89,11 +86,11 @@ class Index extends AbstractAction
             'x_customer_billing_city' => $billingAddress->getData('city'),
             'x_customer_billing_state' => $billingAddress->getData('region'),
             'x_customer_billing_zip' => $billingAddress->getData('postcode'),
-            'x_customer_shipping_address1' => $isVirtual ? "" : $shippingAddressParts[0],
-            'x_customer_shipping_address2' => $isVirtual ? "" : (count($shippingAddressParts) > 1 ? $shippingAddressParts[1] : ''),
-            'x_customer_shipping_city' => $isVirtual ? "":$shippingAddress->getData('city'),
-            'x_customer_shipping_state' => $isVirtual ? "":$shippingAddress->getData('region'),
-            'x_customer_shipping_zip' => $isVirtual ? "":$shippingAddress->getData('postcode'),
+            'x_customer_shipping_address1' => (empty($shippingAddressParts)) ? "" : $shippingAddressParts[0],
+            'x_customer_shipping_address2' => (empty($shippingAddressParts)) ? "" : (count($shippingAddressParts) > 1 ? $shippingAddressParts[1] : ''),
+            'x_customer_shipping_city' => (empty($shippingAddress)) ? "" : $shippingAddress->getData('city'),
+            'x_customer_shipping_state' => (empty($shippingAddress)) ? "" : $shippingAddress->getData('region'),
+            'x_customer_shipping_zip' => (empty($shippingAddress)) ? "" : $shippingAddress->getData('postcode'),
             'version_info' => 'Humm_' . $plugin_version . '_on_magento' . substr($magento_version, 0, 3),
             'x_test' => 'false',
             'x_transaction_timeout' => (intval($this->getGatewayConfig()->getConfigdata('humm_conf/api_timeout')) < 1440) ? intval($this->getGatewayConfig()->getConfigdata('humm_conf/api_timeout')) : 1440,
